@@ -1,0 +1,29 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+select,
+input {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+.table-surface {
+    max-height: calc(100vh - 21rem);
+}
+
+@media (max-width: 1023px) {
+    .table-surface {
+        max-height: none;
+    }
+}

@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Ambiente virtual
+.venv/
+
+# Django
+db.sqlite3
+media/*
+!media/.gitkeep
+staticfiles/
+
+# Configuracoes locais e sensiveis
+.env
+
+# Ferramentas e editores
+.pytest_cache/
+.ruff_cache/
+.coverage
+.vscode/
+.idea/
+
+# Sistema operacional
+Thumbs.db
+.DS_Store

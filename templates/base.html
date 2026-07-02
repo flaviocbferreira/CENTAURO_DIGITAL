@@ -1,0 +1,42 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-br" class="h-full">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}CENTAURO Digital{% endblock %}</title>
+    <script>
+        tailwind = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#ecfeff",
+                            600: "#0f766e",
+                            700: "#0f5f59",
+                            900: "#123331"
+                        }
+                    },
+                    boxShadow: {
+                        premium: "0 18px 45px rgba(15, 23, 42, 0.08)"
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+</head>
+<body class="h-full text-slate-800 antialiased">
+    <div class="app-shell">
+        {% include "partials/navbar.html" %}
+
+        <main class="mx-auto w-full max-w-[95rem] px-4 pb-8 pt-24 sm:px-6 lg:px-8">
+            {% include "partials/messages.html" %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | CENTAURO Digital{% endblock %}
+
+{% block content %}
+    <section class="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end" data-dashboard>
+        <div>
+            <p class="text-sm font-semibold uppercase tracking-wide text-brand-700">Painel geral</p>
+            <h1 class="mt-2 text-3xl font-semibold text-slate-950">Dashboard operacional</h1>
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                Visao inicial para acompanhar os principais modulos do sistema.
+            </p>
+        </div>
+        <div class="rounded border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm">
+            Ambiente visual base com Tailwind CDN
+        </div>
+    </section>
+
+    <section class="grid gap-4 md:grid-cols-3">
+        {% include "partials/card.html" with card_label="Pedidos em separacao" card_value="0" card_status="Inicial" card_description="Indicador reservado para o modulo de separacao." %}
+        {% include "partials/card.html" with card_label="Eventos auditados" card_value="0" card_status="Pronto" card_description="Espaco preparado para trilhas e acoes relevantes." %}
+        {% include "partials/card.html" with card_label="Usuarios administrativos" card_value="0" card_status="Admin" card_description="Acesso administrativo segue pelo painel nativo do Django." %}
+    </section>
+
+    <div class="mt-6">
+        {% include "partials/table.html" with table_title="Resumo dos modulos" table_description="Estrutura visual preparada para dados reais nas proximas etapas." %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

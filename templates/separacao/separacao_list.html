@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load static %}
+{% load separacao_tags %}
+
+{% block title %}Separacao | CENTAURO Digital{% endblock %}
+
+{% block content %}
+    <section class="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+        <div>
+            <p class="text-sm font-semibold uppercase tracking-wide text-brand-700">Modulo operacional</p>
+            <h1 class="mt-2 text-3xl font-semibold text-slate-950">Separacao</h1>
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                Consulte, cadastre e acompanhe registros de separacao.
+            </p>
+        </div>
+        {% if perms.separacao.create_record %}
+            <a href="{% url 'separacao:create' %}" class="inline-flex items-center justify-center rounded bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-900">
+                Novo registro
+            </a>
+        {% endif %}
+    </section>
+
+    <section class="mb-6 grid gap-4 md:grid-cols-5" data-indicators-url="{% url 'separacao:indicadores_json' %}">
+        <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase text-slate-500">Total</p>
+            <p class="mt-2 text-2xl font-semibold text-slate-950" data-indicator="total">-</p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase text-slate-500">Abertas</p>
+            <p class="mt-2 text-2xl font-semibold text-slate-950" data-indicator="abertas">-</p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase text-slate-500">Em andamento</p>
+            <p class="mt-2 text-2xl font-semibold text-slate-950" data-indicator="em_andamento">-</p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase text-slate-500">Concluidas</p>
+            <p class="mt-2 text-2xl font-semibold text-slate-950" data-indicator="concluidas">-</p>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <p class="text-xs font-semibold uppercase text-slate-500">Pendentes</p>
+            <p class="mt-2 text-2xl font-semibold text-slate-950" data-indicator="pendentes_operacionais">-</p>
+        </div>
+    </section>
+
+    <section class="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-premium">
+        <form method="get" class="grid gap-3 xl:grid-cols-[10rem_10rem_1fr_13rem_14rem_13rem_auto_auto] xl:items-end">
+            <div>
+                <label for="data_inicio" class="mb-1.5 block text-xs font-semibold uppercase text-slate-500">Inicio</label>
+                <input id="data_inicio" name="data_inicio" type="date" value="{{ filters.data_inicio }}" class="w-full rounded border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-600 focus:ring-4 focus:ring-brand-50">
+            </div>
+            <div>
+                <label for="data_fim" class="mb-1.5 block text-xs font-semibold uppercase text-slate-500">Fim</label>
+                <input id="data_fim" name="data_fim" type="date" value="{{ filters.data_fim }}" class="w-full rounded border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-600 focus:ring-4 focus:ring-brand-50">
+            </div>
+            <div>
+                <label for="grupo" class="mb-1.5 block text-xs font-semibold uppercase text-slate-500">Grupo</label>
+                <input id="grupo" name="grupo" value="{{ filters.grupo }}" placeholder="Todos os grupos" class="w-full rounded border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-600 focus:ring-4 focus:ring-brand-50">
+            </div>
+            <div>
+                <label for="status_operacional" class="mb-1.5 block text-xs font-semibold uppercase text-slate-500">Status OP</label>
+                <select id="status_operacional" name="status_operacional" class="w-full rounded border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-600 focus:ring-4 focus:ring-brand-50">
+                    <option value="">Todos</option>
+                    {% for value, label in status_operacional_options %}
+                        <option value="{{ value }}" {% if filters.status_operacional == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="atribuido" class="mb-1.5 block text-xs font-semibold uppercase text-slate-500">Atribuido</label>
+                <select id="atribuido" name="atribuido" class="w-full rounded border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-600 focus:ring-4 focus:ring-brand-50">
+                    <option value="">Todos</option>
+                    {% for usuario in usuarios_options %}
+                        <option value="{{ usuario.pk }}" {% if filters.atribuido == usuario.pk|stringformat:"s" %}selected{% endif %}>
+                            {{ usuario.get_full_name|default:usuario.username }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="vencimento_situacao" class="mb-1.5 block text-xs font-semibold uppercase text-slate-500">Vencimento</label>
+                <select id="vencimento_situacao" name="vencimento_situacao" class="w-full rounded border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-600 focus:ring-4 focus:ring-brand-50">
+                    {% for value, label in vencimento_options %}
+                        <option value="{{ value }}" {% if filters.vencimento_situacao == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <a href="{% url 'separacao:list' %}" class="rounded border border-slate-300 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                Limpar
+            </a>
+            <button type="submit" class="rounded border border-slate-300 bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800">
+                Filtrar
+            </button>
+        </form>
+    </section>
+
+    <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-premium">
+        <div class="flex items-center justify-between border-b border-slate-200 bg-white px-5 py-3">
+            <div>
+                <h2 class="text-sm font-semibold text-slate-950">DataTable operacional</h2>
+                <p class="mt-1 text-xs text-slate-500">Consulta principal do modulo de separacao.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <label for="datatable-search" class="sr-only">Pesquisa dinamica</label>
+                <input id="datatable-search" data-datatable-search data-search-url="{% url 'separacao:busca_datatable_json' %}" type="search" placeholder="Pesquisar na pagina..." class="w-72 rounded border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-600 focus:ring-4 focus:ring-brand-50">
+                <span class="rounded bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+                    <span data-visible-rows>{{ separacoes|length }}</span> / {{ page_obj.paginator.count }} registros
+                </span>
+            </div>
+        </div>
+        <div class="table-surface overflow-auto">
+            <table class="min-w-[92rem] divide-y divide-slate-200 text-sm">
+                <thead class="sticky top-0 z-10 bg-slate-950 shadow-sm">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Data</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Romaneio</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Documento</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Grupo</th>
+                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase text-slate-100">Qtd. Doc</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Vencimento</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Status Tipo</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Status OP</th>
+                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase text-slate-100">QTDE PEN</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Atribuido</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-100">Anotacoes</th>
+                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase text-slate-100">Acoes</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for separacao in separacoes %}
+                        <tr class="group odd:bg-white even:bg-slate-50/70 transition-colors hover:bg-teal-50/70" data-datatable-row data-search="{{ separacao.romaneio }} {{ separacao.documento }} {{ separacao.grupo }} {{ separacao.get_status_operacional_display }} {% if separacao.atribuido %}{{ separacao.atribuido.get_full_name }} {{ separacao.atribuido.username }}{% endif %} {{ separacao.anotacoes }}">
+                            <td class="whitespace-nowrap px-4 py-3 text-slate-700">{{ separacao.data|date:"d/m/Y" }}</td>
+                            <td class="whitespace-nowrap px-4 py-3 text-slate-700">{{ separacao.romaneio }}</td>
+                            <td class="whitespace-nowrap px-4 py-3 font-semibold text-slate-950">{{ separacao.documento }}</td>
+                            <td class="whitespace-nowrap px-4 py-3 text-slate-700">{{ separacao.grupo }}</td>
+                            <td class="whitespace-nowrap px-4 py-3 text-right font-semibold tabular-nums text-slate-800">{{ separacao.quantidade }}</td>
+                            <td class="whitespace-nowrap px-4 py-3 text-slate-700">{{ separacao.vencimento|date:"d/m/Y"|default:"-" }}</td>
+                            <td class="whitespace-nowrap px-4 py-3">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset {{ tipo_badges|dict_get:separacao.tipo }}">
+                                    {{ separacao.get_tipo_display }}
+                                </span>
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3">
+                                <select data-status-select data-url="{% url 'separacao:atualizar_status_json' separacao.pk %}" data-field="status_operacional" class="rounded-full border-0 px-2.5 py-1.5 text-xs font-semibold outline-none ring-1 ring-inset focus:ring-2 focus:ring-brand-200 {{ status_operacional_badges|dict_get:separacao.status_operacional }}">
+                                    {% for value, label in status_operacional_options %}
+                                        <option value="{{ value }}" {% if separacao.status_operacional == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3 text-right font-semibold tabular-nums text-slate-800">{{ separacao.quantidade_pendente }}</td>
+                            <td class="whitespace-nowrap px-4 py-3">
+                                <span class="block max-w-36 truncate text-slate-700">
+                                    {% if separacao.atribuido %}
+                                        {{ separacao.atribuido.get_full_name|default:separacao.atribuido.username }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="block max-w-48 truncate text-slate-600" title="{{ separacao.anotacoes }}">
+                                    {{ separacao.anotacoes|default:"-" }}
+                                </span>
+                            </td>
+                            <td class="sticky right-0 whitespace-nowrap bg-inherit px-4 py-3 text-right shadow-[-12px_0_18px_-18px_rgba(15,23,42,0.45)] transition-colors group-hover:bg-teal-50">
+                                <div class="flex justify-end gap-2">
+                                    <a href="{% url 'separacao:detail' separacao.pk %}" class="grid h-8 w-8 place-items-center rounded border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100" title="{{ separacao.motivo_alerta }}" aria-label="{{ separacao.motivo_alerta }}">
+                                        <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.515 2.625H3.72c-1.345 0-2.188-1.458-1.515-2.625L8.485 2.495ZM10 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 6Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                    {% if perms.separacao.edit_record %}
+                                        <a href="{% url 'separacao:update' separacao.pk %}" class="grid h-8 w-8 place-items-center rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 hover:text-brand-700" title="Editar registro" aria-label="Editar registro">
+                                            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path d="m13.586 3.586 2.828 2.828-8.486 8.486H5.1v-2.828l8.486-8.486Z" />
+                                                <path d="M15 2.172a2 2 0 0 1 2.828 2.828l-.707.707-2.828-2.828.707-.707Z" />
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+                                    {% if perms.separacao.delete_record %}
+                                        <a href="{% url 'separacao:delete' separacao.pk %}" class="grid h-8 w-8 place-items-center rounded border border-rose-200 bg-white text-xs font-semibold text-rose-700 hover:bg-rose-50" title="Excluir" aria-label="Excluir">X</a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="12" class="px-5 py-10 text-center text-slate-500">
+                                Nenhum registro de separacao encontrado.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr data-datatable-empty class="hidden">
+                        <td colspan="12" class="px-5 py-10 text-center text-slate-500">
+                            Nenhum registro visivel para a pesquisa digitada.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {% if is_paginated %}
+        <nav class="mt-5 flex flex-col items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm sm:flex-row">
+            <p class="text-slate-600">
+                Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </p>
+            <div class="flex items-center gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.previous_page_number }}" class="rounded border border-slate-300 px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50">
+                        Anterior
+                    </a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.next_page_number }}" class="rounded border border-slate-300 px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50">
+                        Proxima
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+
+    <div data-ajax-feedback class="fixed bottom-4 right-4 hidden rounded bg-slate-950 px-4 py-3 text-sm font-semibold text-white shadow-premium"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/separacao.js' %}"></script>
+{% endblock %}

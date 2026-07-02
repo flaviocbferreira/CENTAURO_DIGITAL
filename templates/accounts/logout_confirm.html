@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Sair | CENTAURO Digital{% endblock %}
+
+{% block content %}
+    <section class="mx-auto flex min-h-[calc(100vh-10rem)] max-w-lg items-center">
+        <div class="w-full rounded-lg border border-slate-200 bg-white p-6 text-center shadow-premium sm:p-8">
+            <p class="text-sm font-semibold uppercase tracking-wide text-brand-700">Sessao</p>
+            <h1 class="mt-2 text-2xl font-semibold text-slate-950">Encerrar acesso?</h1>
+            <p class="mt-3 text-sm leading-6 text-slate-600">
+                Ao sair, sera necessario informar usuario e senha para acessar novamente o painel.
+            </p>
+
+            <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <a href="{% url 'dashboard' %}" class="rounded border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                    Continuar no painel
+                </a>
+                <form method="post" action="{% url 'accounts:logout_confirm' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full rounded bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-900">
+                        Sair com seguranca
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

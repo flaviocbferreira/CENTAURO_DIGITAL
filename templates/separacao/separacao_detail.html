@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ separacao.documento }} | CENTAURO Digital{% endblock %}
+
+{% block content %}
+    <section class="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+        <div>
+            <p class="text-sm font-semibold uppercase tracking-wide text-brand-700">Detalhe da separacao</p>
+            <h1 class="mt-2 text-3xl font-semibold text-slate-950">{{ separacao.documento }}</h1>
+            <p class="mt-2 text-sm text-slate-600">Romaneio {{ separacao.romaneio }}</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="{% url 'separacao:list' %}" class="rounded border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">Voltar</a>
+            {% if perms.separacao.edit_record %}
+                <a href="{% url 'separacao:update' separacao.pk %}" class="rounded bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-900">Editar</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Data</p><p class="mt-2 text-sm text-slate-900">{{ separacao.data|date:"d/m/Y" }}</p></div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Grupo</p><p class="mt-2 text-sm text-slate-900">{{ separacao.grupo }}</p></div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Tipo</p><p class="mt-2 text-sm text-slate-900">{{ separacao.get_tipo_display }}</p></div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Quantidade</p><p class="mt-2 text-sm text-slate-900">{{ separacao.quantidade }}</p></div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Pendente</p><p class="mt-2 text-sm text-slate-900">{{ separacao.quantidade_pendente }}</p></div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Conferida</p><p class="mt-2 text-sm text-slate-900">{{ separacao.quantidade_conferida }}</p></div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Status</p><p class="mt-2 text-sm text-slate-900">{{ separacao.get_status_display }}</p></div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Operacional</p><p class="mt-2 text-sm text-slate-900">{{ separacao.get_status_operacional_display }}</p></div>
+        <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-premium"><p class="text-xs font-semibold uppercase text-slate-500">Autorizacao</p><p class="mt-2 text-sm text-slate-900">{{ separacao.get_status_autorizacao_display }}</p></div>
+    </section>
+{% endblock %}

@@ -1,8 +1,10 @@
 html {
+    /* Rolagem suave melhora a navegacao quando links internos apontarem para secoes da pagina. */
     scroll-behavior: smooth;
 }
 
 body {
+    /* Pede ao navegador renderizacao de texto mais legivel quando possivel. */
     text-rendering: optimizeLegibility;
 }
 
@@ -10,20 +12,25 @@ button,
 a,
 select,
 input {
+    /* Remove o destaque azul/cinza de toque em navegadores mobile WebKit. */
     -webkit-tap-highlight-color: transparent;
 }
 
 .app-shell {
+    /* Garante que o fundo cubra a tela inteira mesmo com pouco conteudo. */
     min-height: 100vh;
+    /* Fundo claro em degradê sutil usado como base visual do sistema. */
     background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
 }
 
 .table-surface {
+    /* Limita a altura da tabela para manter cabecalho/filtros visiveis em telas grandes. */
     max-height: calc(100vh - 21rem);
 }
 
 @media (max-width: 1023px) {
     .table-surface {
+        /* Em telas menores, evita uma area de tabela com altura presa demais. */
         max-height: none;
     }
 }

@@ -1,3 +1,6 @@
+# Framework web principal usado pelo projeto.
 Django>=5.2,<6.0
+# Leitura de variaveis de ambiente e arquivo .env em config/settings/base.py.
 django-environ>=0.11,<1.0
+# Biblioteca de imagens; util quando o projeto trabalhar com uploads/imagens.
 Pillow>=10.0

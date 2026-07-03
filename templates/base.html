@@ -1,15 +1,19 @@
+{# Carrega a tag {% static %}, usada para montar URLs de CSS/JS/imagens da pasta static/. #}
 {% load static %}
 <!doctype html>
 <html lang="pt-br" class="h-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {# O bloco title permite que cada pagina troque o titulo da aba do navegador. #}
     <title>{% block title %}CENTAURO Digital{% endblock %}</title>
     <script>
+        // Configuracao do Tailwind CDN usada por todos os templates.
         tailwind = {
             theme: {
                 extend: {
                     colors: {
+                        // Paleta "brand" centraliza a cor principal do sistema.
                         brand: {
                             50: "#ecfeff",
                             600: "#0f766e",
@@ -18,25 +22,32 @@
                         }
                     },
                     boxShadow: {
+                        // Sombra reutilizada em cards, tabelas e formularios.
                         premium: "0 18px 45px rgba(15, 23, 42, 0.08)"
                     }
                 }
             }
         }
     </script>
+    {# Tailwind via CDN acelera o desenvolvimento inicial sem pipeline de build. #}
     <script src="https://cdn.tailwindcss.com"></script>
+    {# CSS proprio para ajustes globais que nao dependem de classes utilitarias. #}
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 </head>
 <body class="h-full text-slate-800 antialiased">
     <div class="app-shell">
+        {# Navbar fica em partial para ser reaproveitada em todas as paginas. #}
         {% include "partials/navbar.html" %}
 
         <main class="mx-auto w-full max-w-[95rem] px-4 pb-8 pt-24 sm:px-6 lg:px-8">
+            {# Partial que exibe mensagens criadas por django.contrib.messages. #}
             {% include "partials/messages.html" %}
 
+            {# Conteudo principal: cada template filho preenche este bloco. #}
             {% block content %}{% endblock %}
         </main>
     </div>
+    {# Bloco para JavaScript especifico de cada pagina, carregado no final do body. #}
     {% block scripts %}{% endblock %}
 </body>
 </html>

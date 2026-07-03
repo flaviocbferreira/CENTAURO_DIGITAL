@@ -1,5 +1,7 @@
+<!-- Mensagens criadas com django.contrib.messages, como messages.success nas views. -->
 {% if messages %}
     <div class="mb-6 space-y-3">
+        <!-- Cada message e renderizada depois de redirects, por exemplo apos salvar ou excluir. -->
         {% for message in messages %}
             <div class="rounded border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
                 {{ message }}

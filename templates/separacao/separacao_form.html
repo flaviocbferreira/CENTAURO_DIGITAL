@@ -3,6 +3,7 @@
 {% block title %}Separacao | CENTAURO Digital{% endblock %}
 
 {% block content %}
+    <!-- Cabecalho reutilizado para criacao e edicao; object existe quando a UpdateView esta editando um registro. -->
     <section class="mb-6">
         <p class="text-sm font-semibold uppercase tracking-wide text-brand-700">Separacao</p>
         <h1 class="mt-2 text-3xl font-semibold text-slate-950">
@@ -10,8 +11,11 @@
         </h1>
     </section>
 
+    <!-- Formulario enviado por POST para a propria URL; CreateView/UpdateView validam e salvam o ModelForm. -->
     <form method="post" class="rounded-lg border border-slate-200 bg-white p-6 shadow-premium">
+        <!-- csrf_token protege contra envio malicioso de formulario por outro site. -->
         {% csrf_token %}
+        <!-- Erros sem campo especifico aparecem aqui, acima dos inputs. -->
         {% if form.non_field_errors %}
             <div class="mb-5 rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                 {{ form.non_field_errors }}
@@ -19,12 +23,15 @@
         {% endif %}
 
         <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <!-- O loop percorre todos os campos definidos em SeparacaoForm.Meta.fields. -->
             {% for field in form %}
                 <div>
                     <label for="{{ field.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-700">
                         {{ field.label }}
                     </label>
+                    <!-- field renderiza o widget HTML com classes aplicadas no __init__ do form. -->
                     {{ field }}
+                    <!-- Erros especificos do campo, como quantidade pendente maior que quantidade. -->
                     {% if field.errors %}
                         <p class="mt-2 text-xs font-medium text-red-600">{{ field.errors|striptags }}</p>
                     {% endif %}
@@ -32,6 +39,7 @@
             {% endfor %}
         </div>
 
+        <!-- Acoes finais: cancelar volta para listagem; salvar envia o POST. -->
         <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
             <a href="{% url 'separacao:list' %}" class="rounded border border-slate-300 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">
                 Cancelar

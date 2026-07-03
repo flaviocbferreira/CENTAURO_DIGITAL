@@ -1,7 +1,9 @@
+# Importa configuracoes comuns e sobrescreve apenas o que muda em producao.
 from .base import *  # noqa: F403
+# BASE_DIR monta caminhos; env le variaveis obrigatorias do ambiente.
 from .base import BASE_DIR, env
 
-# Ambiente de producao: valores sensiveis devem vir do .env ou do ambiente.
+# Ambiente de producao: DEBUG=False evita vazar erros, variaveis e paths internos.
 DEBUG = False
 
 # Chave criptografica obrigatoria em producao.
@@ -10,8 +12,9 @@ SECRET_KEY = env("SECRET_KEY")
 # Dominios autorizados a servir a aplicacao em producao.
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
-# Banco inicial mantido em SQLite. Quando MySQL ou PostgreSQL for escolhido,
-# a troca deve ficar concentrada aqui, sem alterar regras de negocio dos apps.
+# Banco inicial mantido em SQLite.
+# Quando MySQL ou PostgreSQL for escolhido, a troca deve ficar concentrada aqui,
+# sem alterar models, views ou services dos apps.
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",

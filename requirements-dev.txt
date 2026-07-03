@@ -1,4 +1,6 @@
+# Reaproveita todas as dependencias de producao/desenvolvimento base.
 -r requirements.txt
 
 # Ferramentas de qualidade para desenvolvimento local.
+# Ruff analisa estilo, imports e possiveis problemas simples no codigo Python.
 ruff>=0.8,<1.0
